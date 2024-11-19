@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Viewer</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff; /* Light blue background */
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 20px;
+            font-size: 1.8em;
+            color: #555;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        /* Buttons */
+        button {
+            background-color: #007bff; /* Blue button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        button:disabled {
+            background-color: #ccc; /* Gray for disabled buttons */
+            cursor: not-allowed;
+        }
+
+        /* Centering */
+        form {
+            text-align: center;
+        }
+
+        div {
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bible Viewer</h1>
+    <form method="POST">
+        <div>
+            <label for="lang">Select Language:</label><br>
+            {% for lang in languages %}
+                <button type="submit" name="lang" value="{{ lang }}"
+                        {% if lang == selected_lang %}style="font-weight: bold;"{% endif %}>
+                    {{ lang.upper() }}
+                </button>
+            {% endfor %}
+        </div>
+        <div>
+            <h2>Verse:</h2>
+            <p>"{{ verse.Text }}"</p>
+            <p><strong>{{ verse['Book Name'] }} {{ verse.Chapter }}:{{ verse.Verse }}</strong></p>
+        </div>
+        <input type="hidden" name="lang" value="{{ selected_lang }}">
+        <div>
+            <button type="submit" name="verse_id" value="{{ verse.previous }}" {% if not verse.previous %}disabled{% endif %}>
+                Previous
+            </button>
+            <button type="submit" name="verse_id" value="{{ verse.next }}" {% if not verse.next %}disabled{% endif %}>
+                Next
+            </button>
+        </div>
+    </form>
+</body>
+</html>
