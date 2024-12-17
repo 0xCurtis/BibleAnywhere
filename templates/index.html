@@ -361,11 +361,13 @@
             box-shadow: {{ theme.shadow.small }};
             transition: all 0.2s ease;
             cursor: pointer;
+            border-left: 3px solid transparent;
         }
 
         .search-result-item:hover {
             box-shadow: {{ theme.shadow.medium }};
             transform: translateY(-1px);
+            border-left-color: {{ theme.primary.main }};
         }
 
         .result-reference {
@@ -377,8 +379,15 @@
         .highlight {
             background-color: {{ theme.primary.light }};
             color: {{ theme.text.primary }};
-            padding: 0 2px;
-            border-radius: 2px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+            margin: 0 1px;
+        }
+
+        .result-text {
+            margin-top: 8px;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -494,10 +503,11 @@
         {% if search_results is defined and search_results %}
         <div class="search-results active">
             <h2>Search Results for "{{ search_query }}"</h2>
+            <p>Found {{ search_results|length }} matches</p>
             {% for result in search_results %}
             <div class="search-result-item" onclick="navigateToVerse('{{ result.verse_id }}')">
                 <div class="result-reference">{{ result.book_name }} {{ result.chapter }}:{{ result.verse }}</div>
-                <div class="result-text">{{ result.text }}</div>
+                <div class="result-text">{{ result.highlighted_text | safe }}</div>
             </div>
             {% endfor %}
         </div>

@@ -7,6 +7,7 @@ import threading
 from functools import lru_cache
 import json
 import os
+import re
 
 app = Flask(__name__)
 
@@ -215,6 +216,11 @@ def get_chapter_verses(book_name, chapter, lang):
         """, (lang, book_name, chapter))
         return [dict(row) for row in cursor.fetchall()]
 
+def highlight_text(text, keyword):
+    """Add highlight markers around matching text"""
+    pattern = re.compile(f'({re.escape(keyword)})', re.IGNORECASE)
+    return pattern.sub(r'<mark class="highlight">\1</mark>', text)
+
 def search_verses(keyword, lang):
     """Search for verses containing the keyword"""
     with get_db_cursor() as cursor:
@@ -226,7 +232,13 @@ def search_verses(keyword, lang):
             ORDER BY verse_id
             LIMIT 100
         """, (lang, f"%{keyword}%"))
-        return [dict(row) for row in cursor.fetchall()]
+        results = [dict(row) for row in cursor.fetchall()]
+        
+        # Add highlighted text to results
+        for result in results:
+            result['highlighted_text'] = highlight_text(result['text'], keyword)
+        
+        return results
 
 @app.route('/verse/random', methods=['GET'])
 def get_random_verse():
