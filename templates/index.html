@@ -8,93 +8,615 @@
         /* General styles */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f8ff; /* Light blue background */
-            color: #333;
+            background-color: {{ theme.background.main }};
+            color: {{ theme.text.primary }};
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 300px;
+            background-color: {{ theme.background.sidebar }};
+            border-right: 1px solid {{ theme.border.main }};
+            padding: 20px;
+            overflow-y: auto;
             height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
         }
 
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        h2 {
+        .sidebar h3 {
+            color: {{ theme.primary.main }};
             margin-top: 20px;
-            font-size: 1.8em;
-            color: #555;
+            padding-bottom: 10px;
+            border-bottom: 2px solid {{ theme.border.main }};
         }
 
-        p {
-            font-size: 1.2em;
-            margin: 10px 0;
-            text-align: center;
+        .book-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
-        /* Buttons */
+        .book-item {
+            margin: 5px 0;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            color: {{ theme.text.primary }};
+        }
+
+        .book-item:hover {
+            background-color: {{ theme.background.hover }};
+        }
+
+        .book-item.active {
+            background-color: {{ theme.primary.main }};
+            color: {{ theme.primary.text }};
+            box-shadow: {{ theme.shadow.small }};
+        }
+
+        .chapter-list {
+            display: none;
+            padding-left: 20px;
+            margin: 5px 0;
+        }
+
+        .chapter-list.active {
+            display: block;
+        }
+
+        .chapter-item {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 3px;
+            background-color: {{ theme.background.hover }};
+            border: 1px solid {{ theme.border.main }};
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: {{ theme.text.primary }};
+            transition: all 0.2s ease;
+        }
+
+        .chapter-item:hover {
+            background-color: {{ theme.primary.main }};
+            color: {{ theme.primary.text }};
+            border-color: {{ theme.primary.main }};
+        }
+
+        .chapter-item.active {
+            background-color: {{ theme.primary.main }};
+            color: {{ theme.primary.text }};
+            border-color: {{ theme.primary.main }};
+            font-weight: bold;
+        }
+
+        /* Main content styles */
+        .main-content {
+            flex: 1;
+            margin-left: 340px;
+            padding: 20px 40px;
+            max-width: calc(100% - 340px);
+            box-sizing: border-box;
+        }
+
+        .language-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: {{ theme.background.paper }};
+            border-radius: 8px;
+            box-shadow: {{ theme.shadow.small }};
+            max-width: 800px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+
         button {
-            background-color: #007bff; /* Blue button */
-            color: white;
+            background-color: {{ theme.background.hover }};
+            color: {{ theme.text.primary }};
             border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
+            border-radius: 4px;
+            padding: 8px 16px;
             margin: 5px;
             cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+            box-shadow: {{ theme.shadow.small }};
         }
 
         button:hover {
-            background-color: #0056b3; /* Darker blue on hover */
+            background-color: {{ theme.primary.main }};
+            color: {{ theme.primary.text }};
+            box-shadow: {{ theme.shadow.medium }};
+            transform: translateY(-1px);
         }
 
         button:disabled {
-            background-color: #ccc; /* Gray for disabled buttons */
+            background-color: {{ theme.background.hover }};
+            color: {{ theme.text.disabled }};
             cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
         }
 
-        /* Centering */
-        form {
-            text-align: center;
+        button[style*="font-weight: bold"] {
+            background-color: {{ theme.primary.main }};
+            color: {{ theme.primary.text }};
         }
 
-        div {
+        .verse-container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: {{ theme.background.paper }};
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: {{ theme.shadow.large }};
+            box-sizing: border-box;
+        }
+
+        .verse-text {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: {{ theme.text.primary }};
+            margin: 20px 0;
+        }
+
+        /* Navigation buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .nav-buttons button {
+            min-width: 100px;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: {{ theme.primary.main }};
+            color: {{ theme.primary.text }};
+        }
+
+        .nav-buttons button:hover {
+            background-color: {{ theme.primary.dark }};
+        }
+
+        .nav-buttons button:disabled {
+            background-color: {{ theme.background.hover }};
+            color: {{ theme.text.disabled }};
+        }
+
+        /* Chapter controls */
+        .chapter-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: {{ theme.background.paper }};
+            border-radius: 8px;
+            box-shadow: {{ theme.shadow.small }};
+            max-width: 800px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+
+        .verse-select {
+            flex: 1;
+            min-width: 120px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid {{ theme.border.main }};
+            background-color: {{ theme.background.paper }};
+            color: {{ theme.text.primary }};
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+        .verse-select:focus {
+            outline: none;
+            border-color: {{ theme.primary.main }};
+            box-shadow: {{ theme.shadow.small }};
+        }
+
+        /* Chapter view */
+        .chapter-view {
+            display: none;
+            margin-top: 20px;
+            max-width: 800px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+
+        .chapter-view.active {
+            display: block;
+        }
+
+        .verse-item {
             margin: 15px 0;
+            padding: 10px;
+            background-color: {{ theme.background.paper }};
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .verse-item:hover {
+            box-shadow: {{ theme.shadow.small }};
+        }
+
+        .verse-item.current {
+            border-left: 4px solid {{ theme.primary.main }};
+            padding-left: 15px;
+        }
+
+        .verse-number {
+            font-weight: bold;
+            color: {{ theme.primary.main }};
+            margin-right: 10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-left: 320px;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+
+        /* Search styles */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: {{ theme.background.paper }};
+            border-radius: 8px;
+            box-shadow: {{ theme.shadow.small }};
+            max-width: 800px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid {{ theme.border.main }};
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: {{ theme.text.primary }};
+            background-color: {{ theme.background.paper }};
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: {{ theme.primary.main }};
+            box-shadow: {{ theme.shadow.small }};
+        }
+
+        /* Search results */
+        .search-results {
+            display: none;
+            margin-top: 20px;
+            max-width: 800px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-result-item {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: {{ theme.background.paper }};
+            border-radius: 4px;
+            box-shadow: {{ theme.shadow.small }};
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .search-result-item:hover {
+            box-shadow: {{ theme.shadow.medium }};
+            transform: translateY(-1px);
+        }
+
+        .result-reference {
+            font-weight: bold;
+            color: {{ theme.primary.main }};
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background-color: {{ theme.primary.light }};
+            color: {{ theme.text.primary }};
+            padding: 0 2px;
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
-    <h1>Bible Viewer</h1>
-    <form method="POST">
-        <div>
-            <label for="lang">Select Language:</label><br>
-            {% for lang in languages %}
-                <button type="submit" name="lang" value="{{ lang }}"
-                        {% if lang == selected_lang %}style="font-weight: bold;"{% endif %}>
-                    {{ lang.upper() }}
-                </button>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <h2>Bible Navigation</h2>
+        
+        <!-- Old Testament -->
+        <h3>Old Testament</h3>
+        <ul class="book-list">
+            {% for book, info in old_testament.items() %}
+            <li class="book-item {% if book == current_book %}active{% endif %}" 
+                onclick="toggleChapters('{{ book }}')">
+                {{ book }}
+                <div class="chapter-list {% if book == current_book %}active{% endif %}" id="{{ book|replace(' ', '_') }}">
+                    {% for chapter in range(info.min_chapter|int, info.max_chapter|int + 1) %}
+                    <span class="chapter-item {% if book == current_book and chapter == current_chapter|int %}active{% endif %}"
+                          onclick="navigateToChapter('{{ book }}', '{{ chapter }}', '{{ selected_lang }}')">
+                        {{ chapter }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- New Testament -->
+        <h3>New Testament</h3>
+        <ul class="book-list">
+            {% for book, info in new_testament.items() %}
+            <li class="book-item {% if book == current_book %}active{% endif %}"
+                onclick="toggleChapters('{{ book }}')">
+                {{ book }}
+                <div class="chapter-list {% if book == current_book %}active{% endif %}" id="{{ book|replace(' ', '_') }}">
+                    {% for chapter in range(info.min_chapter|int, info.max_chapter|int + 1) %}
+                    <span class="chapter-item {% if book == current_book and chapter == current_chapter|int %}active{% endif %}"
+                          onclick="navigateToChapter('{{ book }}', '{{ chapter }}', '{{ selected_lang }}')">
+                        {{ chapter }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-bar">
+            <form class="search-form" method="POST" action="{{ url_for('search') }}">
+                <input type="hidden" name="lang" value="{{ selected_lang }}">
+                <input type="text" 
+                       name="keyword" 
+                       class="search-input" 
+                       placeholder="Search in Bible..."
+                       value="{{ search_query if search_query else '' }}"
+                       required>
+                <button type="submit">Search</button>
+            </form>
+            <div class="language-buttons">
+                {% for lang in languages %}
+                <form method="POST" style="display: inline;">
+                    <button type="submit" name="lang" value="{{ lang }}"
+                            {% if lang == selected_lang %}style="font-weight: bold;"{% endif %}>
+                        {{ lang.upper() }}
+                    </button>
+                </form>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="chapter-controls">
+            <select class="verse-select" onchange="navigateToVerse(this.value)">
+                {% for v in chapter_verses %}
+                    <option value="{{ v.verse_id }}" {% if v.verse_id == verse.verse_id %}selected{% endif %}>
+                        Verse {{ v.verse }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button onclick="toggleChapterView()" id="viewChapterBtn">
+                View Full Chapter
+            </button>
+        </div>
+
+        <div class="verse-container">
+            <h2>{{ verse.book_name }} {{ verse.chapter }}:{{ verse.verse }}</h2>
+            <p class="verse-text">"{{ verse.text }}"</p>
+            
+            <div class="nav-buttons">
+                <form method="POST">
+                    <input type="hidden" name="lang" value="{{ selected_lang }}">
+                    <button type="submit" name="verse_id" value="{{ verse.previous }}" {% if not verse.previous %}disabled{% endif %}>
+                        Previous
+                    </button>
+                    <button type="submit" name="verse_id" value="{{ verse.next }}" {% if not verse.next %}disabled{% endif %}>
+                        Next
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="chapter-view" id="chapterView">
+            <h2>{{ verse.book_name }} Chapter {{ verse.chapter }}</h2>
+            {% for v in chapter_verses %}
+                <div class="verse-item {% if v.verse_id == verse.verse_id %}current{% endif %}">
+                    <span class="verse-number">{{ v.verse }}</span>
+                    {{ v.text }}
+                </div>
             {% endfor %}
         </div>
-        <div>
-            <h2>Verse:</h2>
-            <p>"{{ verse.Text }}"</p>
-            <p><strong>{{ verse['Book Name'] }} {{ verse.Chapter }}:{{ verse.Verse }}</strong></p>
+
+        {% if search_results is defined and search_results %}
+        <div class="search-results active">
+            <h2>Search Results for "{{ search_query }}"</h2>
+            {% for result in search_results %}
+            <div class="search-result-item" onclick="navigateToVerse('{{ result.verse_id }}')">
+                <div class="result-reference">{{ result.book_name }} {{ result.chapter }}:{{ result.verse }}</div>
+                <div class="result-text">{{ result.text }}</div>
+            </div>
+            {% endfor %}
         </div>
-        <input type="hidden" name="lang" value="{{ selected_lang }}">
-        <div>
-            <button type="submit" name="verse_id" value="{{ verse.previous }}" {% if not verse.previous %}disabled{% endif %}>
-                Previous
-            </button>
-            <button type="submit" name="verse_id" value="{{ verse.next }}" {% if not verse.next %}disabled{% endif %}>
-                Next
-            </button>
-        </div>
-    </form>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleChapters(book) {
+            const bookId = book.replace(/ /g, '_');
+            const chapterList = document.getElementById(bookId);
+            const allChapterLists = document.getElementsByClassName('chapter-list');
+            
+            // Close all other chapter lists
+            for (let list of allChapterLists) {
+                if (list.id !== bookId) {
+                    list.classList.remove('active');
+                }
+            }
+            
+            // Toggle the clicked book's chapter list
+            chapterList.classList.toggle('active');
+            
+            // Update active book highlighting
+            const allBookItems = document.getElementsByClassName('book-item');
+            for (let item of allBookItems) {
+                item.classList.remove('active');
+            }
+            chapterList.parentElement.classList.add('active');
+        }
+
+        function navigateToChapter(book, chapter, lang) {
+            // Create form data
+            const formData = new FormData();
+            formData.append('book_name', book);
+            formData.append('chapter', chapter);
+            formData.append('lang', lang);
+
+            // Send POST request to get the verse ID
+            fetch('/get_chapter_verse', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.verse_id) {
+                    // Create and submit form to navigate to the verse
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.style.display = 'none';
+
+                    const langInput = document.createElement('input');
+                    langInput.type = 'hidden';
+                    langInput.name = 'lang';
+                    langInput.value = lang;
+
+                    const verseInput = document.createElement('input');
+                    verseInput.type = 'hidden';
+                    verseInput.name = 'verse_id';
+                    verseInput.value = data.verse_id;
+
+                    form.appendChild(langInput);
+                    form.appendChild(verseInput);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function navigateToVerse(verseId) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.style.display = 'none';
+
+            const langInput = document.createElement('input');
+            langInput.type = 'hidden';
+            langInput.name = 'lang';
+            langInput.value = '{{ selected_lang }}';
+
+            const verseInput = document.createElement('input');
+            verseInput.type = 'hidden';
+            verseInput.name = 'verse_id';
+            verseInput.value = verseId;
+
+            form.appendChild(langInput);
+            form.appendChild(verseInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function toggleChapterView() {
+            const chapterView = document.getElementById('chapterView');
+            const verseContainer = document.querySelector('.verse-container');
+            const btn = document.getElementById('viewChapterBtn');
+            
+            if (chapterView.classList.contains('active')) {
+                chapterView.classList.remove('active');
+                verseContainer.style.display = 'block';
+                btn.textContent = 'View Full Chapter';
+            } else {
+                chapterView.classList.add('active');
+                verseContainer.style.display = 'none';
+                btn.textContent = 'Show Single Verse';
+                
+                // Scroll to current verse if it exists
+                const currentVerse = document.querySelector('.verse-item.current');
+                if (currentVerse) {
+                    currentVerse.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        // Automatically scroll to the active book
+        document.addEventListener('DOMContentLoaded', function() {
+            const activeBook = document.querySelector('.book-item.active');
+            if (activeBook) {
+                activeBook.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    </script>
 </body>
 </html>
