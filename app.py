@@ -428,5 +428,5 @@ def close_connection(exception):
     # Clear verse cache when the app context ends
     verse_cache.clear()
 
-if __name__ == '__main__':
-    app.run()
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=3000)
