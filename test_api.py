@@ -1,5 +1,5 @@
 import pytest
-from api import app, load_csv_data
+from app import app, load_csv_data
 
 @pytest.fixture
 def client():
